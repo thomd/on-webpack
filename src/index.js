@@ -1,1 +1,2 @@
-console.log('default entry point')
+import _ from 'lodash-es'
+console.log(_.capitalize('default entry point'))
