@@ -1,4 +1,10 @@
+tutorials:
 
   [ ] https://www.valentinog.com/blog/webpack-tutorial/
   [ ] https://scotch.io/tutorials/setting-up-webpack-for-any-project
   [ ] https://github.com/trivago/parallel-webpack
+
+check level of ES6 supported without Babel:
+
+  [ ]   [ ] https://github.com/ruanyf/es-checker
+  [ ] https://github.com/Tokimon/es-feature-detection
