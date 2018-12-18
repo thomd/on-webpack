@@ -6,5 +6,5 @@ tutorials:
 
 check level of ES6 supported without Babel:
 
-  [ ]   [ ] https://github.com/ruanyf/es-checker
-  [ ] https://github.com/Tokimon/es-feature-detection
+  [X] https://github.com/ruanyf/es-checker
+  [X] https://github.com/Tokimon/es-feature-detection
