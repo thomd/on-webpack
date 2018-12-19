@@ -42,4 +42,45 @@ In order to create multiple bundles, export multiple configs in an array like th
 
     module.exports = [config1, config2]
 
+## Webpack Loaders
+
+Without any loader, Webpack is basically a bundler for javascript modules (ESM and CommonJS) which adds
+bootstrap code for module loading.
+
+### Transpile Javascript with Babel
+
+Install dependencies
+
+    npm i -D @babel/core @babel/cli @babel/preset-env
+    npm i -D babel-loader
+
+and inspect transpiled code via
+
+    npx babel ./srcindex.js --presets=@bable/preset-env
+
+Extend Webpack configuration with
+
+```
+    module.exports = {
+      mode: 'production',
+      entry: './src/index.js',
+      output: {
+        path: __dirname + '/dist',
+        filename: 'main.js'
+-      }
++      },
++      module: {
++        rules: [
++          {
++            test: /\.js$/,
++            loader: 'babel-loader',
++            exclude: /node_modules/,
++            options: {
++              presets: ['@babel/preset-env']
++            }
++          }
++        ]
++      }
+    }
+```
 

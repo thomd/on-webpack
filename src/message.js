@@ -1,3 +1,3 @@
-const message = 'hello world'
+const message = (name = 'world') => `hello ${name}`
 
 export default message
