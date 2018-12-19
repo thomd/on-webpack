@@ -1,2 +1,4 @@
-import _ from 'lodash-es'
-console.log(_.capitalize('default entry point'))
+import { startCase } from 'lodash-es'
+import message from './message'
+
+console.log(startCase(message))

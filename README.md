@@ -19,3 +19,21 @@ Build in **Production mode** to enable optimizations out of the box, including m
 
     npx webpack --mode production
 
+> Tree shaking is a term commonly used in the JavaScript context for dead-code elimination. It relies on the static structure of ES2015 module syntax, i.e. `import` and `export`.
+
+## Basic Setup with configuration file
+
+Create a `webpack.config.js` file
+
+    module.exports = {
+      mode: 'production',
+      entry: './src/index.js',
+      output: {
+        path: __dirname + '/dist',
+        filename: 'main.js'
+      }
+    }
+
+and run
+
+    npx webpack
