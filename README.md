@@ -23,7 +23,7 @@ Build in **Production mode** to enable optimizations out of the box, including m
 
 ## Basic Setup with configuration file
 
-Create a `webpack.config.js` file
+Create a `webpack.config.js` file (using default settings)
 
     module.exports = {
       mode: 'production',
@@ -37,3 +37,9 @@ Create a `webpack.config.js` file
 and run
 
     npx webpack
+
+In order to create multiple bundles, export multiple configs in an array like this:
+
+    module.exports = [config1, config2]
+
+
