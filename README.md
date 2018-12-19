@@ -77,7 +77,7 @@ and either transpile with
 
     npx webpack --mode development --module-bind js=babel-loader
 
-or add a Babel loader rule to Webpack configuration with
+or add a Babel loader rule into Webpack configuration:
 
 ```diff
     module.exports = {
@@ -96,6 +96,25 @@ or add a Babel loader rule to Webpack configuration with
 +         }
 +       ]
       }
+    }
+```
+
+### Transpile React JSX with Babel
+
+First install [React](https://reactjs.org/) as a runtime dependency
+
+    npm i react react-dom
+
+Then install Babels React preset
+
+    npm i -D @babel/preset-react
+
+and add to the Babel configuration file `.babelrc`
+
+```diff
+    {
+-     "presets": ["@babel/preset-env"]
++     "presets": ["@babel/preset-env", "@babel/preset-react"]
     }
 ```
 

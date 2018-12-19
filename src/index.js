@@ -1,3 +1,5 @@
-import message from './message'
+import React from 'react'
+import ReactDOM from 'react-dom'
+import App from './App'
 
-console.log(message('webpack'))
+ReactDOM.render(<App/>, document.getElementById('app'))
