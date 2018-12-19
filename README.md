@@ -1,8 +1,10 @@
 # on-webpack
 
-Notes on using Webpack 4
+Notes on using [Webpack 4](https://webpack.js.org/).
 
-## Basic Setup without configuration file
+## Basic Setup
+
+### Without configuration file
 
     npm init -y
     npm i -D webpack webpack-cli
@@ -21,7 +23,7 @@ Build in **Production mode** to enable optimizations out of the box, including m
 
 > Tree shaking is a term commonly used in the JavaScript context for dead-code elimination. It relies on the static structure of ES2015 module syntax, i.e. `import` and `export`.
 
-## Basic Setup with configuration file
+### With configuration file
 
 Create a `webpack.config.js` file (using default settings)
 
@@ -44,6 +46,8 @@ In order to create multiple bundles, export multiple configs in an array like th
 
     module.exports = [config1, config2]
 
+---
+
 ## Webpack Loaders
 
 Without any loader, Webpack is basically a bundler for javascript modules (ESM and CommonJS) which adds
@@ -51,16 +55,29 @@ bootstrap code for module loading.
 
 ### Transpile Javascript with Babel
 
-Install dependencies
+First install [Babel](https://babeljs.io/) dependencies
 
     npm i -D @babel/core @babel/cli @babel/preset-env
-    npm i -D babel-loader
+
+then create a Babel configuration file `.babelrc`
+
+    {
+      "presets": ["@babel/preset-env"]
+    }
 
 and inspect transpiled code via
 
-    npx babel ./srcindex.js --presets=@bable/preset-env
+    npx babel ./srcindex.js
 
-Extend Webpack configuration with
+Second, install Babel loader with
+
+    npm i -D babel-loader
+
+and either transpile with
+
+    npx webpack --mode development --module-bind js=babel-loader
+
+or add a Babel loader rule to Webpack configuration with
 
 ```diff
     module.exports = {
@@ -69,20 +86,18 @@ Extend Webpack configuration with
       output: {
         path: __dirname + '/dist',
         filename: 'main.js'
--      }
-+      },
-+      module: {
-+        rules: [
-+          {
-+            test: /\.js$/,
-+            loader: 'babel-loader',
-+            exclude: /node_modules/,
-+            options: {
-+              presets: ['@babel/preset-env']
-+            }
-+          }
-+        ]
-+      }
+-     }
++     },
++     module: {
++       rules: [
++         {
++           test: /\.js$/,
++           loader: 'babel-loader',
++           exclude: /node_modules/
++         }
++       ]
++     }
     }
 ```
+
 
