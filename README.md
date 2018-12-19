@@ -1,4 +1,4 @@
-# on-webpack
+# On Webpack
 
 Notes on using [Webpack 4](https://webpack.js.org/).
 
@@ -67,7 +67,7 @@ then create a Babel configuration file `.babelrc`
 
 and inspect transpiled code via
 
-    npx babel ./srcindex.js
+    npx babel ./src/index.js
 
 Second, install Babel loader with
 
@@ -86,7 +86,6 @@ or add a Babel loader rule to Webpack configuration with
       output: {
         path: __dirname + '/dist',
         filename: 'main.js'
--     }
 +     },
 +     module: {
 +       rules: [
@@ -96,7 +95,7 @@ or add a Babel loader rule to Webpack configuration with
 +           exclude: /node_modules/
 +         }
 +       ]
-+     }
+      }
     }
 ```
 
