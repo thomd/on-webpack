@@ -25,6 +25,7 @@ Build in **Production mode** to enable optimizations out of the box, including m
 
 Create a `webpack.config.js` file (using default settings)
 
+```javascript
     module.exports = {
       mode: 'production',
       entry: './src/index.js',
@@ -33,6 +34,7 @@ Create a `webpack.config.js` file (using default settings)
         filename: 'main.js'
       }
     }
+```
 
 and run
 
@@ -60,7 +62,7 @@ and inspect transpiled code via
 
 Extend Webpack configuration with
 
-```
+```diff
     module.exports = {
       mode: 'production',
       entry: './src/index.js',
