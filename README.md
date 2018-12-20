@@ -72,6 +72,8 @@ Show hidden modules on stdout
 
 ## Webpack Loaders
 
+Loaders describe to webpack how to process non-JavaScript modules and include these dependencies into your bundles.
+
 Without any loader, Webpack is basically a bundler for javascript modules (ESM and CommonJS) which adds bootstrap code for module loading.
 
 ### Transpile Javascript with Babel
