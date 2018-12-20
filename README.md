@@ -1,6 +1,6 @@
-# On Webpack
+Some personal notes
 
-Some personal notes on using [Webpack 4](https://webpack.js.org/).
+# On Webpack 4
 
 In Webpack, everything is a **module**. Not only JavaScript but also everything else (stylesheets, images, markup) can be a module.
 
