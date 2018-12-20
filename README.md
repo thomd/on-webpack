@@ -10,6 +10,8 @@ With **loaders** you can transform your code before bundling. With **plugins** y
 
 Hence, Webpack is basically about **entry**, **output**, **loaders** and **plugins**.
 
+---
+
 ## Entry & Output
 
 ### Without configuration file
