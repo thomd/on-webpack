@@ -1,8 +1,16 @@
 # On Webpack
 
-Notes on using [Webpack 4](https://webpack.js.org/).
+Some personal notes on using [Webpack 4](https://webpack.js.org/).
 
-## Basic Setup
+In Webpack, everything is a **module**. Not only JavaScript but also everything else (stylesheets, images, markup) can be a module.
+
+Starting from **entry** points, Webpack creates a dependency graph which allows for bundling single or multiple **outputs** so that you just load what you need and when you need it.
+
+With **loaders** you can transform your code before bundling. With **plugins** you can perform subsequent tasks like bundle optimizations (Webpack itself is considered a plugin with one behaviour by default: bundle assets).
+
+Hence, Webpack is basically about **entry**, **output**, **loaders** and **plugins**.
+
+## Entry & Output
 
 ### Without configuration file
 
@@ -45,6 +53,12 @@ and run
 In order to create multiple bundles, export multiple configs in an array like this:
 
     module.exports = [config1, config2]
+
+### Webpack Options
+
+Run Webpack in **watch mode** with
+
+    npx webpack --watch
 
 ---
 
@@ -118,4 +132,13 @@ and add to the Babel configuration file `.babelrc`
     }
 ```
 
+---
+
+## Webpack Plugins
+
+---
+
+## Webpack Tools
+
+- [ ] https://medium.com/@joeclever/three-simple-ways-to-inspect-a-webpack-bundle-7f6a8fe7195d
 
