@@ -6,7 +6,9 @@ In Webpack, everything is a **module**. Not only JavaScript but also everything 
 
 Starting from **entry** points, Webpack creates a dependency graph which allows for bundling single or multiple **outputs** so that you just load what you need and when you need it.
 
-With **loaders** you can transform your code before bundling. With **plugins** you can perform subsequent tasks like bundle optimizations (Webpack itself is considered a plugin with one behaviour by default: bundle assets).
+With **loaders** you can intercept your dependencies and pre-process them before they get bundled.
+
+With **plugins** you can perform subsequent tasks like bundle optimizations (Webpack itself is considered a plugin with one behaviour by default: bundle assets).
 
 Hence, Webpack is basically about **entry**, **output**, **loaders** and **plugins**.
 
@@ -62,12 +64,15 @@ Run Webpack in **watch mode** with
 
     npx webpack --watch
 
+Show hidden modules on stdout
+
+    npx webpack --display-modules
+
 ---
 
 ## Webpack Loaders
 
-Without any loader, Webpack is basically a bundler for javascript modules (ESM and CommonJS) which adds
-bootstrap code for module loading.
+Without any loader, Webpack is basically a bundler for javascript modules (ESM and CommonJS) which adds bootstrap code for module loading.
 
 ### Transpile Javascript with Babel
 
@@ -137,6 +142,27 @@ and add to the Babel configuration file `.babelrc`
 ---
 
 ## Webpack Plugins
+
+### Create HTML file for bundled modules
+
+The [HtmlWebpackPlugin](https://github.com/jantimon/html-webpack-plugin) creates an `index.html` file and add script tags for each resulting bundle. It also supports templating syntax and is highly configurable.
+
+If you have any CSS assets (for example, CSS extracted with the MiniCssExtractPlugin) then these will be included with `<link>` tags in the HTML head.
+
+Install plugin with
+
+    npm i -D html-webpack-plugin
+
+and add to `webpack.config.js`:
+
+```diff
++   const HtmlWebpackPlugin = require('html-webpack-plugin')
+    module.exports = {
++     plugins: [
++       new HtmlWebpackPlugin()
++     ]
+    }
+```
 
 ---
 
