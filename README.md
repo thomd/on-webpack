@@ -188,6 +188,7 @@ Remove build specific configuration from base
       }
     }
 ```
+
 and create specific configuration `webpac.config.dev.js`
 
     const merge = require('webpack-merge')
@@ -200,6 +201,42 @@ and create specific configuration `webpac.config.dev.js`
 Then build with
 
     npx webpack --config webpack.config.dev.js
+
+### Webpack Development Server
+
+Install with
+
+    npm i -D webpack-dev-server
+
+and replace `webpack --watch` in the npm script
+
+```diff
+{
+  "name": "on-webpack",
+  "scripts": {
+-   "dev": "webpack --watch --config webpack.config.dev.js",
++   "dev": "webpack-dev-server --open --config webpack.config.dev.js",
+    "build": "webpack --config webpack.config.prod.js"
+  }
+}
+
+```
+
+or use the CLI with
+
+    npx webpack-dev-server
+
+The dev server can be extended using the key `devServer` in the webpack configuration:
+
+```diff
+    module.exports = {
+      mode: 'development',
++     devServer: {
++       port: 9000,
++       disableHostCheck: true
++     }
+    }
+```
 
 ### Inspect Webpack bundle
 
