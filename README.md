@@ -39,15 +39,15 @@ Build in **Production mode** to enable optimizations out of the box, including m
 
 Create a `webpack.config.js` file (using default settings)
 
-```
-    module.exports = {
-      mode: 'production',
-      entry: './src/index.js',
-      output: {
-        path: __dirname + '/dist',
-        filename: 'main.js'
-      }
-    }
+```diff
++   module.exports = {
++     mode: 'production',
++     entry: './src/index.js',
++     output: {
++       path: __dirname + '/dist',
++       filename: 'main.js'
++     }
++   }
 ```
 
 and run
@@ -84,9 +84,11 @@ First install [Babel](https://babeljs.io/) dependencies
 
 then create a Babel configuration file `.babelrc`
 
-    {
-      "presets": ["@babel/preset-env"]
-    }
+```diff
++   {
++     "presets": ["@babel/preset-env"]
++   }
+```
 
 and inspect transpiled code via
 
@@ -191,12 +193,14 @@ Remove build specific configuration from base
 
 and create environment specific configurations like `webpac.config.dev.js`
 
-    const merge = require('webpack-merge')
-    const base = require('./webpack.config')
-    module.exports = merge(base, {
-      mode: 'development',
-      devtool: 'source-map'
-    })
+```diff
++   const merge = require('webpack-merge')
++   const base = require('./webpack.config')
++   module.exports = merge(base, {
++     mode: 'development',
++     devtool: 'source-map'
++   })
+```
 
 Then build with
 
