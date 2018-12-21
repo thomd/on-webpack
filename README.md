@@ -39,7 +39,7 @@ Build in **Production mode** to enable optimizations out of the box, including m
 
 Create a `webpack.config.js` file (using default settings)
 
-```javascript
+```
     module.exports = {
       mode: 'production',
       entry: './src/index.js',
@@ -169,6 +169,39 @@ and add to `webpack.config.js`:
 ---
 
 ## Webpack Tools
+
+### Manage multiple configurations
+
+Extend a base configuration with `webpack-merge`:
+
+    npm i -D webpack-merge
+
+Remove build specific configuration from base
+
+```diff
+    module.exports = {
+-     mode: 'production',
+      entry: './src/index.js',
+      output: {
+        path: __dirname + '/dist',
+        filename: 'main.js'
+      }
+    }
+```
+and create specific configuration `webpac.config.dev.js`
+
+    const merge = require('webpack-merge')
+    const base = require('./webpack.config')
+    
+    module.exports = merge(base, {
+      mode: 'development'
+    })
+
+Then build with
+
+    npx webpack --config webpack.config.dev.js
+
+### Inspect Webpack bundle
 
 - [ ] https://medium.com/@joeclever/three-simple-ways-to-inspect-a-webpack-bundle-7f6a8fe7195d
 
