@@ -189,13 +189,13 @@ Remove build specific configuration from base
     }
 ```
 
-and create specific configuration `webpac.config.dev.js`
+and create environment specific configurations like `webpac.config.dev.js`
 
     const merge = require('webpack-merge')
     const base = require('./webpack.config')
-    
     module.exports = merge(base, {
-      mode: 'development'
+      mode: 'development',
+      devtool: 'source-map'
     })
 
 Then build with
