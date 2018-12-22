@@ -130,16 +130,18 @@ First install [React](https://reactjs.org/) as a runtime dependency
 
     npm i react react-dom
 
-Then install Babels React preset
+Then install Babels React preset and optionally some plugins (for example class-properties syntax)
 
     npm i -D @babel/preset-react
+    npm i -D @babel/plugin-proposal-class-properties
 
 and add to the Babel configuration file `.babelrc`
 
 ```diff
     {
--     "presets": ["@babel/preset-env"]
-+     "presets": ["@babel/preset-env", "@babel/preset-react"]
+-     presets: ["@babel/preset-env"]
++     presets: ["@babel/preset-env", "@babel/preset-react"]
++     plugins: ["@babel/plugin-proposal-class-properties"]
     }
 ```
 
