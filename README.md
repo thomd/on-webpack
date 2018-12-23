@@ -74,9 +74,9 @@ Show hidden modules on stdout
 
 Loaders describe to webpack how to process non-JavaScript modules and include these dependencies into your bundles.
 
-Without any loader, Webpack is basically a bundler for javascript modules (ESM and CommonJS) which adds bootstrap code for module loading.
+Without any loader, Webpack is basically a bundler for JavaScript modules (ESM and CommonJS) which adds bootstrap code for module loading.
 
-### Transpile Javascript with Babel
+### Transpile JavaScript with Babel
 
 First install [Babel](https://babeljs.io/) dependencies
 
@@ -90,9 +90,24 @@ then create a Babel configuration file `.babelrc`
 +   }
 ```
 
-and inspect transpiled code via
+and define the supported browsers in `package.json` like this:
 
-    npx babel ./src/index.js
+```diff
+    {
+      "name": "on-webpack",
++     "browserslist": [
++       "last 2 versions",
++       "ie >= 10"
++     ]
+    }
+```
+
+You may then verify the list of browsers via
+
+    npx browserslist
+
+Be aware, that Babel only adds polyfills for [ECMAScript](https://tc39.github.io/ecma262/) methods.
+For methods from the Browser API, for example [fetch](https://fetch.spec.whatwg.org/), you need to add the polyfill yourself.
 
 Second, install Babel loader with
 
@@ -106,7 +121,6 @@ or add a Babel loader rule into Webpack configuration:
 
 ```diff
     module.exports = {
-      mode: 'production',
       entry: './src/index.js',
       output: {
         path: __dirname + '/dist',
@@ -145,6 +159,105 @@ and add to the Babel configuration file `.babelrc`
     }
 ```
 
+### Import CSS
+
+The `css-loader` resolves `@import` and `url()` as modules like `import/require()` and returns the CSS code as JavaScript. It doesn't actually do anything with the returned CSS.
+
+The `style-loader` adds the CSS to the DOM by injecting a `<style>` tag.
+
+    npm i -D style-loader css-loader
+
+First add both loaders into Webpack configuration (loaders are evaluated from right to left):
+
+```diff
+    module.exports = {
+      entry: './src/index.js',
+      output: {
+        path: __dirname + '/dist',
+        filename: 'main.js'
++     },
++     module: {
++       rules: [
++         {
++           test: /\.css$/,
++           use: ['style-loader', 'css-loader'],
++           exclude: /node_modules/
++         }
++       ]
+      }
+    }
+```
+
+Then import the CSS in the entry file `./src/index.js` like being a module
+
+    import './main.css'
+
+and import subsequent CSS dependencies in `main.css` like so
+
+```diff
+    @import '~bootstrap/dist/css/bootstrap.css';
+    @import './app.css';
+```
+
+### Transpile CSS with SASS and PostCSS
+
+Install loaders, SASS and Autoprefixer with
+
+    npm i -D node-sass autoprefixer
+    npm i -D postcss-loader sass-loader
+
+and add a PostCSS configuration `postcss.config.js`
+
+```diff
++   module.exports = {
++     plugins: [
++       require('autoprefixer')()
++     ]
++   };
+```
+
+Define the supported browsers in `package.json` like this:
+
+```diff
+    {
+      "name": "on-webpack",
++     "browserslist": [
++       "last 2 versions",
++       "ie >= 10"
++     ]
+    }
+```
+
+You may check the supported browsers and CSS prefixes via
+
+    npx browserslist
+    npx autoprefixer --info
+
+Then add webpack loaders to `webpack.config.js`
+
+```diff
+    module.exports = {
+      entry: './src/index.js',
+      output: {
+        path: __dirname + '/dist',
+        filename: 'main.js'
+      },
+      module: {
+        rules: [
+          {
+-           test: /\.css$/,
++           test: /\.scss$/,
+-           use: ['style-loader', 'css-loader'],
++           use: ['style-loader', 'css-loader', 'postcss-loader', 'sass-loader'],
+            exclude: /node_modules/
+          }
+        ]
+      }
+    }
+```
+
+
+
 ---
 
 ## Webpack Plugins
@@ -168,6 +281,20 @@ and add to `webpack.config.js`:
 +       new HtmlWebpackPlugin()
 +     ]
     }
+```
+
+Using SASS allows to import selective Bootstrap components. If you for example only want to use the button component, then import the following in `main.css`:
+
+```diff
+-   @import '~bootstrap/dist/css/bootstrap.css';
++   @import '~bootstrap/scss/functions';
++   @import '~bootstrap/scss/variables';
++   @import '~bootstrap/scss/mixins';
++   @import '~bootstrap/scss/buttons';
++   @import '~bootstrap/scss/button-group';
+    
+    @import './variables';
+    @import './app';
 ```
 
 ---
