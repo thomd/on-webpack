@@ -147,7 +147,6 @@ First install [React](https://reactjs.org/) as a runtime dependency
 Then install Babels React preset and optionally some plugins (for example class-properties syntax)
 
     npm i -D @babel/preset-react
-    npm i -D @babel/plugin-proposal-class-properties
 
 and add to the Babel configuration file `.babelrc`
 
@@ -155,6 +154,18 @@ and add to the Babel configuration file `.babelrc`
     {
 -     presets: ["@babel/preset-env"]
 +     presets: ["@babel/preset-env", "@babel/preset-react"]
+    }
+```
+
+If you want to use class properties, then install the babel plugin for it:
+
+    npm i -D @babel/plugin-proposal-class-properties
+
+and add into `.babelrc` as plugin:
+
+```diff
+    {
+      presets: ["@babel/preset-env", "@babel/preset-react"]
 +     plugins: ["@babel/plugin-proposal-class-properties"]
     }
 ```
@@ -195,8 +206,8 @@ Then import the CSS in the entry file `./src/index.js` like being a module
 and import subsequent CSS dependencies in `main.css` like so
 
 ```diff
-    @import '~bootstrap/dist/css/bootstrap.css';
-    @import './app.css';
++   @import '~bootstrap/dist/css/bootstrap.css';
++   @import './app.css';
 ```
 
 ### Transpile CSS with SASS and PostCSS
@@ -256,7 +267,19 @@ Then add webpack loaders to `webpack.config.js`
     }
 ```
 
+Using SASS allows to import selective Bootstrap components. If you for example only want to use the button component, then import the following in `main.css`:
 
+```diff
+-   @import '~bootstrap/dist/css/bootstrap.css';
++   @import '~bootstrap/scss/functions';
++   @import '~bootstrap/scss/variables';
++   @import '~bootstrap/scss/mixins';
++   @import '~bootstrap/scss/buttons';
++   @import '~bootstrap/scss/button-group';
+
+    @import './variables';
+    @import './app';
+```
 
 ---
 
@@ -281,20 +304,6 @@ and add to `webpack.config.js`:
 +       new HtmlWebpackPlugin()
 +     ]
     }
-```
-
-Using SASS allows to import selective Bootstrap components. If you for example only want to use the button component, then import the following in `main.css`:
-
-```diff
--   @import '~bootstrap/dist/css/bootstrap.css';
-+   @import '~bootstrap/scss/functions';
-+   @import '~bootstrap/scss/variables';
-+   @import '~bootstrap/scss/mixins';
-+   @import '~bootstrap/scss/buttons';
-+   @import '~bootstrap/scss/button-group';
-    
-    @import './variables';
-    @import './app';
 ```
 
 ---
