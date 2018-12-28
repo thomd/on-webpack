@@ -337,16 +337,22 @@ In case you need a specific HTML file, for example with a React application cont
 
 ### Extract CSS
 
-The **mini-css-extract-plugin** extracts CSS into separate files. It creates a CSS file per JS file which contains CSS. It supports On-Demand-Loading of CSS and SourceMaps.
+The **mini-css-extract-plugin** extracts CSS into separate files. It creates a CSS file per JS file which contains CSS. It supports on-demand-loading of CSS and source-maps.
 
     npm i -D mini-css-extract-plugin
 
 **MiniCssExtractPlugin** includes a loader `MiniCssExtractPlugin.loader` (to be replaced with `style-loader`) that marks the assets to be extracted. Then a plugin performs its work based on this annotation.
 
+If the CSS is not a JavaScript dependency, then add as an entry.
+
 ```diff
 +   const MiniCssExtractPlugin = require("mini-css-extract-plugin")
     module.exports = {
-      entry: './src/index.js',
+-     entry: './src/index.js',
++     entry: [
++       './src/index.js',
++       './src/main.scss'
++     ]
       output: {
         path: __dirname + '/dist',
         filename: 'main.js'
@@ -370,6 +376,14 @@ The **mini-css-extract-plugin** extracts CSS into separate files. It creates a C
 ```
 
 In combination with the **HtmlWebpackPlugin**, a `<link rel="stylesheet" href="...">` tag is renderd in the extracted `ìndex.html`.
+
+To fully manage styles outside of JavaScript, glob the CSS files through an entry like this:
+
+```
+    entry: {
+      style: glob.sync("./src/**/*.css")
+    }
+```
 
 ---
 
