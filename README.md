@@ -54,7 +54,9 @@ and run
 
     npx webpack
 
-In order to create multiple bundles, export multiple configs in an array like this:
+The key `entry` can be a string (`'./src/index.js'`), an array (`['./src/index.js']`) or an object(`{'index': './src/index.js'}`).
+
+In order to create multiple bundles, you can export multiple configs in an array:
 
     module.exports = [config1, config2]
 
@@ -174,7 +176,7 @@ and add into `.babelrc` as plugin:
 
 The `css-loader` resolves `@import` and `url()` as modules like `import/require()` and returns the CSS code as JavaScript. It doesn't actually do anything with the returned CSS.
 
-The `style-loader` adds the CSS to the DOM by injecting a `<style>` tag.
+The `style-loader` adds the CSS to the DOM by injecting a `<style>` tag on run-time.
 
     npm i -D style-loader css-loader
 
@@ -209,6 +211,8 @@ and import subsequent CSS dependencies in `main.css` like so
 +   @import '~bootstrap/dist/css/bootstrap.css';
 +   @import './app.css';
 ```
+
+Injecting CSS as `<style>` tag by JavaScript is performance wise not the best idea - you should load CSS as soon as possible to avoid FOUC and leverage caching. Use the MiniCssExtractPlugin plugin (see below) to extract CSS as a separate file.
 
 ### Transpile CSS with SASS and PostCSS
 
@@ -281,13 +285,24 @@ Using SASS allows to import selective Bootstrap components. If you for example o
     @import './app';
 ```
 
+### Export into separate files
+
+As an alternative to the **HTMLWebpackPlugin** or the **mini-css-extract-plugin** you can alos use a combination of the **file-loader** and the **extract-loader**.
+
+```diff
+    {
+      test: /\.html$/,
+      use: ['file-loader?name=[name].[ext]', 'extract-loader', 'html-loader'],
+    }
+```
+
 ---
 
 ## Webpack Plugins
 
-### Create HTML file for bundled modules
+### Create HTML index file for bundled modules
 
-The [HtmlWebpackPlugin](https://github.com/jantimon/html-webpack-plugin) creates an `index.html` file and add script tags for each resulting bundle. It also supports templating syntax and is highly configurable.
+The **HtmlWebpackPlugin** creates a new `index.html` file and add script tags for each resulting bundle. It also supports templating syntax and is highly configurable.
 
 If you have any CSS assets (for example, CSS extracted with the MiniCssExtractPlugin) then these will be included with `<link>` tags in the HTML head.
 
@@ -305,6 +320,56 @@ and add to `webpack.config.js`:
 +     ]
     }
 ```
+
+In case you need a specific HTML file, for example with a React application container element `<div id="app"></div>`, then create a template file `./src/index.html` and reference in Webpack config:
+
+```diff
+    const HtmlWebpackPlugin = require('html-webpack-plugin')
+    module.exports = {
+      plugins: [
+-       new HtmlWebpackPlugin()
++       new HtmlWebpackPlugin({
++         template: './src/index.html'
++       })
+      ]
+    }
+```
+
+### Extract CSS
+
+The **mini-css-extract-plugin** extracts CSS into separate files. It creates a CSS file per JS file which contains CSS. It supports On-Demand-Loading of CSS and SourceMaps.
+
+    npm i -D mini-css-extract-plugin
+
+**MiniCssExtractPlugin** includes a loader `MiniCssExtractPlugin.loader` (to be replaced with `style-loader`) that marks the assets to be extracted. Then a plugin performs its work based on this annotation.
+
+```diff
++   const MiniCssExtractPlugin = require("mini-css-extract-plugin")
+    module.exports = {
+      entry: './src/index.js',
+      output: {
+        path: __dirname + '/dist',
+        filename: 'main.js'
+      },
+      module: {
+        rules: [
+          {
+            test: /\.scss$/,
+-           use: ['style-loader', 'css-loader', 'postcss-loader', 'sass-loader'],
++           use: [MiniCssExtractPlugin.loader, 'css-loader', 'postcss-loader', 'sass-loader'],
+            exclude: /node_modules/
+          }
+        ]
+      },
++     plugins: [
++       new MiniCssExtractPlugin({
++         filename: "[name].css"
++       })
++     ]
+    }
+```
+
+In combination with the **HtmlWebpackPlugin**, a `<link rel="stylesheet" href="...">` tag is renderd in the extracted `ìndex.html`.
 
 ---
 
@@ -375,12 +440,59 @@ The dev server can be extended using the key `devServer` in the webpack configur
       mode: 'development',
 +     devServer: {
 +       port: 9000,
-+       disableHostCheck: true
++       disableHostCheck: true,
++       headers: {
++         "Access-Control-Allow-Origin": "*"
++       }
 +     }
     }
 ```
+
+### Debugging Webpack
+
+Either use the CLI debugger with
+
+    node inspect node_modules/.bin/webpack --config webpack.config.dev.js
+    > sb('webpack.config.js', 3)
+    > c
+
+or use VS Code with the following **Launch Configuration**:
+
+```json
+    "launch": {
+      "configurations": [{
+        "type": "node",
+        "request": "launch",
+        "name": "Launch Webpack",
+        "program": "${workspaceFolder}/node_modules/webpack/bin/webpack.js"
+      }]
+    }
+```
+
+Optionally add `args` or `env` like this:
+
+```diff
+    "launch": {
+      "configurations": [{
+        "type": "node",
+        "request": "launch",
+        "name": "Launch Webpack",
+        "program": "${workspaceFolder}/node_modules/webpack/bin/webpack.js",
++       "args": [
++         "--config", "./some/dir/webpack.config.js"
++       ],
++       "env" : { 
++         "NODE_ENV" : "production"
++       }
+      }]
+    }
+```
+
 
 ### Inspect Webpack bundle
 
 - [ ] https://medium.com/@joeclever/three-simple-ways-to-inspect-a-webpack-bundle-7f6a8fe7195d
 
+### inspectpack(1)
+
+https://github.com/FormidableLabs/inspectpack
