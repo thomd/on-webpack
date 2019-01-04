@@ -354,7 +354,7 @@ In case you need a specific HTML file, for example with a React application cont
     }
 ```
 
-### Extract CSS
+### Extract CSS into separate files
 
 The **mini-css-extract-plugin** extracts CSS into separate files. It creates a CSS file per JS file which contains CSS. It supports on-demand-loading of CSS and source-maps.
 
@@ -402,6 +402,72 @@ To fully manage styles outside of JavaScript, glob the CSS files through an entr
     entry: {
       style: glob.sync("./src/**/*.css")
     }
+```
+
+### Hot Module Replacement
+
+Hot Module Replacement (HMR) allows modules to be updated at runtime without the need for a full refresh and without loosing current state.
+
+HMR can only work with loaders that implement and understand HMR API, for example **style-loader**, **react-hot-loader**, etc. HMR is not supported by **MiniCssExtractPlugin.loader**.
+
+You need to use Webpack via webpack-dev-server and it should oly be used for development.
+
+#### Setup
+
+Update the **webpack-dev-server** configuration and use Webpacks built in HMR plugin in `webpack.config.dev.js`:
+
+```diff
+    const merge = require('webpack-merge')
+    const base = require('./webpack.config')
++   const webpack = require('webpack')
+
+    module.exports = merge(base, {
+      mode: 'development',
+      devtool: 'source-map',
+      devServer: {
+        port: 9000,
+        disableHostCheck: true,
++       hot: true
+      },
++     plugins: [
++       new webpack.HotModuleReplacementPlugin()
++     ]
+    })
+```
+
+Alternatively, just use the `--hot` option of the **webpack-dev-server** CLI
+
+    npx webpack-dev-server --hot
+
+#### React Setup
+
+Install **react-hot-loader**
+
+    npm i -D react-hot-loader
+
+and add to `.babelrc`:
+
+```diff
+    {
+      plugins: [
+        '@babel/plugin-proposal-class-properties',
++       'react-hot-loader/babel'
+      ]
+    }
+```
+
+Then mark your root component `./src/App.js` as hot-exported:
+
+```diff
+    import React from 'react'
++   import { hot } from 'react-hot-loader/root'
+
+    class App extends React.Component {
+      ...
+    }
+
+-   export default App
++   export default hot(App)
 ```
 
 ---
@@ -480,6 +546,8 @@ The dev server can be extended using the key `devServer` in the webpack configur
 +     }
     }
 ```
+
+Webpack-dev-server does **life-reloading**: the browser is refreshed immediately each time there is a code change. This is a different concept compared to HMR.
 
 ### Debugging Webpack
 
