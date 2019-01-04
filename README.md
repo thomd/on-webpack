@@ -2,7 +2,7 @@ Some personal notes on
 
 # Webpack 4
 
-In Webpack, everything is a **module**. Not only JavaScript but also everything else (stylesheets, images, markup) can be a module.
+Webpack is a **module bundler**. In Webpack, everything is a **module**. Not only JavaScript but also everything else (style sheets, images, markup) can be a module.
 
 Starting from **entry** points, Webpack creates a dependency graph which allows for bundling single or multiple **outputs** so that you just load what you need and when you need it.
 
@@ -60,13 +60,32 @@ In order to create multiple bundles, you can export multiple configs in an array
 
     module.exports = [config1, config2]
 
+### Multiple entry files
+
+Use an entry object in case of multiple entry files and replace the output with a filename **substitution**:
+
+```diff
+    module.exports = {
+-     entry: './src/index.js',
++     entry: {
++       main: './src/index.js',
++       vendor: 'src/vendor.js'
++     },
+      output: {
+        path: __dirname + '/dist',
+-       filename: 'main.js'
++       filename: '[name].js'
+      }
+    }
+```
+
 ### Webpack Options
 
 Run Webpack in **watch mode** with
 
     npx webpack --watch
 
-Show hidden modules on stdout
+Print also hidden modules with
 
     npx webpack --display-modules
 
