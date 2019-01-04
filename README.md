@@ -1,6 +1,4 @@
-Some personal notes on
-
-# Webpack 4
+Some personal notes on **Webpack 4**.
 
 Webpack is a **module bundler**. In Webpack, everything is a **module**. Not only JavaScript but also everything else (style sheets, images, markup) can be a module.
 
@@ -14,9 +12,9 @@ Hence, Webpack is basically about **entry**, **output**, **loaders** and **plugi
 
 ---
 
-## Entry & Output
+# Entry & Output
 
-### Without configuration file
+## Without configuration file
 
     npm init -y
     npm i -D webpack webpack-cli
@@ -35,7 +33,7 @@ Build in **Production mode** to enable optimizations out of the box, including m
 
 > Tree shaking is a term commonly used in the JavaScript context for dead-code elimination. It relies on the static structure of ES2015 module syntax, i.e. `import` and `export`.
 
-### With configuration file
+## With configuration file
 
 Create a `webpack.config.js` file (using default settings)
 
@@ -60,7 +58,7 @@ In order to create multiple bundles, you can export multiple configs in an array
 
     module.exports = [config1, config2]
 
-### Multiple entry files
+## Multiple entry files
 
 Use an entry object in case of multiple entry files and replace the output with a filename **substitution**:
 
@@ -79,7 +77,7 @@ Use an entry object in case of multiple entry files and replace the output with 
     }
 ```
 
-### Webpack Options
+## Webpack Options
 
 Run Webpack in **watch mode** with
 
@@ -89,15 +87,13 @@ Print also hidden modules with
 
     npx webpack --display-modules
 
----
-
-## Webpack Loaders
+# Webpack Loaders
 
 Loaders describe to webpack how to process non-JavaScript modules and include these dependencies into your bundles.
 
 Without any loader, Webpack is basically a bundler for JavaScript modules (ESM and CommonJS) which adds bootstrap code for module loading.
 
-### Transpile JavaScript with Babel
+## Transpile JavaScript with Babel
 
 First install [Babel](https://babeljs.io/) dependencies
 
@@ -159,7 +155,7 @@ or add a Babel loader rule into Webpack configuration:
     }
 ```
 
-### Transpile React JSX with Babel
+## Transpile React JSX with Babel
 
 First install [React](https://reactjs.org/) as a runtime dependency
 
@@ -191,7 +187,7 @@ and add into `.babelrc` as plugin:
     }
 ```
 
-### Import CSS
+## Import CSS
 
 The `css-loader` resolves `@import` and `url()` as modules like `import/require()` and returns the CSS code as JavaScript. It doesn't actually do anything with the returned CSS.
 
@@ -233,7 +229,7 @@ and import subsequent CSS dependencies in `main.css` like so
 
 Injecting CSS as `<style>` tag by JavaScript is performance wise not the best idea - you should load CSS as soon as possible to avoid FOUC and leverage caching. Use the MiniCssExtractPlugin plugin (see below) to extract CSS as a separate file.
 
-### Transpile CSS with SASS and PostCSS
+## Transpile CSS with SASS and PostCSS
 
 Install loaders, SASS and Autoprefixer with
 
@@ -304,7 +300,7 @@ Using SASS allows to import selective Bootstrap components. If you for example o
     @import './app';
 ```
 
-### Export into separate files
+## Export into separate files
 
 As an alternative to the **HTMLWebpackPlugin** or the **mini-css-extract-plugin** you can alos use a combination of the **file-loader** and the **extract-loader**.
 
@@ -315,11 +311,9 @@ As an alternative to the **HTMLWebpackPlugin** or the **mini-css-extract-plugin*
     }
 ```
 
----
+# Webpack Plugins
 
-## Webpack Plugins
-
-### Create HTML index file for bundled modules
+## Create HTML index file for bundled modules
 
 The **HtmlWebpackPlugin** creates a new `index.html` file and add script tags for each resulting bundle. It also supports templating syntax and is highly configurable.
 
@@ -354,7 +348,7 @@ In case you need a specific HTML file, for example with a React application cont
     }
 ```
 
-### Extract CSS into separate files
+## Extract CSS into separate files
 
 The **mini-css-extract-plugin** extracts CSS into separate files. It creates a CSS file per JS file which contains CSS. It supports on-demand-loading of CSS and source-maps.
 
@@ -404,7 +398,7 @@ To fully manage styles outside of JavaScript, glob the CSS files through an entr
     }
 ```
 
-### Hot Module Replacement
+## Hot Module Replacement
 
 Hot Module Replacement (HMR) allows modules to be updated at runtime without the need for a full refresh and without loosing current state.
 
@@ -412,7 +406,7 @@ HMR can only work with loaders that implement and understand HMR API, for exampl
 
 You need to use Webpack via webpack-dev-server and it should oly be used for development.
 
-#### Setup
+### Setup
 
 Update the **webpack-dev-server** configuration and use Webpacks built in HMR plugin in `webpack.config.dev.js`:
 
@@ -439,7 +433,7 @@ Alternatively, just use the `--hot` option of the **webpack-dev-server** CLI
 
     npx webpack-dev-server --hot
 
-#### React Setup
+### React Setup
 
 Install **react-hot-loader**
 
@@ -470,11 +464,9 @@ Then mark your root component `./src/App.js` as hot-exported:
 +   export default hot(App)
 ```
 
----
+# Webpack Best Practices
 
-## Webpack Tools
-
-### Manage multiple configurations
+## Manage multiple configurations
 
 Extend a base configuration with `webpack-merge`:
 
@@ -508,7 +500,7 @@ Then build with
 
     npx webpack --config webpack.config.dev.js
 
-### Webpack Development Server
+## Webpack Development Server
 
 Install with
 
@@ -549,7 +541,7 @@ The dev server can be extended using the key `devServer` in the webpack configur
 
 Webpack-dev-server does **life-reloading**: the browser is refreshed immediately each time there is a code change. This is a different concept compared to HMR.
 
-### Debugging Webpack
+## Debugging Webpack
 
 Either use the CLI debugger with
 
@@ -590,10 +582,12 @@ Optionally add `args` or `env` like this:
 ```
 
 
-### Inspect Webpack bundle
+## Inspect Webpack bundle
 
-- [ ] https://medium.com/@joeclever/three-simple-ways-to-inspect-a-webpack-bundle-7f6a8fe7195d
+https://medium.com/@joeclever/three-simple-ways-to-inspect-a-webpack-bundle-7f6a8fe7195d
 
-### inspectpack(1)
+https://levelup.gitconnected.com/lessons-learned-from-a-year-of-fighting-with-webpack-and-babel-ce3b4b634c46
+
+## inspectpack(1)
 
 https://github.com/FormidableLabs/inspectpack
