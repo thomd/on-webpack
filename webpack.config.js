@@ -2,13 +2,13 @@ const HtmlWebpackPlugin = require('html-webpack-plugin')
 const MiniCssExtractPlugin = require("mini-css-extract-plugin")
 
 module.exports = {
-  entry: [
-    './src/index.js',
-    './src/main.scss'
-  ],
+  entry: {
+    'main': ['./src/index.js', './src/analytics.js'],
+    'style': './src/main.scss'
+  },
   output: {
     path: __dirname + '/dist',
-    filename: 'main.js'
+    filename: '[name].js'
   },
   module: {
     rules: [
@@ -19,7 +19,7 @@ module.exports = {
       },
       {
         test: /\.scss$/,
-        use: [MiniCssExtractPlugin.loader, 'css-loader', 'postcss-loader', 'sass-loader'],
+        use: ['file-loader?name=[name].css', 'extract-loader', 'css-loader', 'postcss-loader', 'sass-loader'],
         exclude: /node_modules/
       }
     ]
@@ -27,9 +27,6 @@ module.exports = {
   plugins: [
     new HtmlWebpackPlugin({
       template: './src/index.html'
-    }),
-    new MiniCssExtractPlugin({
-      filename: "[name].css"
     })
   ]
 }

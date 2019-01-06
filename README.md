@@ -54,19 +54,30 @@ and run
 
 The key `entry` can be a string (`'./src/index.js'`), an array (`['./src/index.js']`) or an object(`{'index': './src/index.js'}`).
 
-In order to create multiple bundles, you can export multiple configs in an array:
+## Append multiple files
+
+You can append multiple files that are **NOT dependent on each other** into one bundle using the Array format:
+
+```diff
+    module.exports = {
+-     entry: './src/index.js',
++     entry: ['./src/index.js', './src/analytics.js']
+    }
+```
+
+## Multiple bundles
+
+In order to create multiple bundles, you can either export multiple configurations in an array like this:
 
     module.exports = [config1, config2]
 
-## Multiple entry files
-
-Use an entry object in case of multiple entry files and replace the output with a filename **substitution**:
+or you can use an entry object with multiple entry files and replace the output with a filename **substitution**:
 
 ```diff
     module.exports = {
 -     entry: './src/index.js',
 +     entry: {
-+       main: './src/index.js',
++       main: ['./src/index.js', './src/analytics.js'],
 +       vendor: 'src/vendor.js'
 +     },
       output: {
@@ -216,7 +227,7 @@ First add both loaders into Webpack configuration (loaders are evaluated from ri
     }
 ```
 
-Then import the CSS in the entry file `./src/index.js` like being a module
+Then import the CSS as a dependency in the entry file `./src/index.js` like being a module
 
     import './main.css'
 
@@ -302,12 +313,19 @@ Using SASS allows to import selective Bootstrap components. If you for example o
 
 ## Export into separate files
 
-As an alternative to the **HTMLWebpackPlugin** or the **mini-css-extract-plugin** you can alos use a combination of the **file-loader** and the **extract-loader**.
+As an alternative to the **HTMLWebpackPlugin** or the **mini-css-extract-plugin** you can also use a combination of the **file-loader** and the **extract-loader**.
 
 ```diff
     {
       test: /\.html$/,
       use: ['file-loader?name=[name].[ext]', 'extract-loader', 'html-loader'],
+    }
+```
+
+```diff
+    {
+      test: /\.scss$/,
+      use: ['file-loader?name=[name].css', 'extract-loader', 'css-loader', 'postcss-loader', 'sass-loader'],
     }
 ```
 
@@ -362,10 +380,10 @@ If the CSS is not a JavaScript dependency, then add as an entry.
 +   const MiniCssExtractPlugin = require("mini-css-extract-plugin")
     module.exports = {
 -     entry: './src/index.js',
-+     entry: [
-+       './src/index.js',
-+       './src/main.scss'
-+     ]
++     entry: {
++       'main': './src/index.js',
++       'style': './src/main.scss'
++     },
       output: {
         path: __dirname + '/dist',
         filename: 'main.js'
