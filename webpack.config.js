@@ -22,6 +22,18 @@ module.exports = {
         test: /\.scss$/,
         use: [MiniCssExtractPlugin.loader, 'css-loader', 'postcss-loader', 'sass-loader'],
         exclude: /node_modules/
+      },
+      {
+      test: /\.(png|jpe?g|gif|svg)$/,
+        use: [
+          {
+            loader: 'url-loader',
+            options: {
+              limit: 5000,
+              fallback: 'file-loader?name=[name].[ext]'
+            }
+          }
+        ]
       }
     ]
   },

@@ -1,4 +1,5 @@
 import React from 'react'
+import Header from './Header'
 import { hot } from 'react-hot-loader/root'
 
 class App extends React.Component {
@@ -8,7 +9,7 @@ class App extends React.Component {
   render() {
     return (
       <div>
-        <h1>Hello World</h1>
+        <Header/>
         <h2>Count: {this.state.count}</h2>
         <div className="btn-group">
           <button className="btn btn-light" onClick={() => this.setState(state => ({count: state.count + 1}))}>count up</button>

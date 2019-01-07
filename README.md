@@ -1,4 +1,4 @@
-Some personal notes on **Webpack 4**.
+> Some personal notes on **Webpack 4**.
 
 Webpack is a **module bundler**. In Webpack, everything is a **module**. Not only JavaScript but also everything else (style sheets, images, markup) can be a module.
 
@@ -103,6 +103,26 @@ Print also hidden modules with
 Loaders describe to webpack how to process non-JavaScript modules and include these dependencies into your bundles.
 
 Without any loader, Webpack is basically a bundler for JavaScript modules (ESM and CommonJS) which adds bootstrap code for module loading.
+
+There are three ways to use loaders:
+
+* **Configuration** (recommended): Specify them in your `webpack.config.js` file.
+* **Inline**: Specify them explicitly in each import statement.
+* **CLI**: Specify them within a shell command.
+
+## Inline Loaders
+
+Separate loaders from the import resource with `!`. Each part is resolved relative to the current directory:
+
+    import Styles from 'style-loader!css-loader?modules!./styles.css';
+
+It’s possible to **override** any loaders in the configuration by **prefixing** the entire rule with `!`:
+
+    import logo from '!url-loader?limit=10000!./webpack.png'
+
+Options can be passed with a query parameter, e.g. `?key=value&foo=bar`, or a JSON object, e.g. `?{"key":"value","foo":"bar"}`.
+
+Use `module.rules` whenever possible, as this will reduce boilerplate in your source code and allow you to debug or locate a loader faster.
 
 ## Transpile JavaScript with Babel
 
@@ -315,17 +335,107 @@ Using SASS allows to import selective Bootstrap components. If you for example o
 
 As an lean alternative to the **HTMLWebpackPlugin**, the **extract-text-webpack-plugin** or the **mini-css-extract-plugin** you can also use a combination of the **file-loader** and the **extract-loader**.
 
-```diff
-    {
-      test: /\.html$/,
-      use: ['file-loader?name=[name].[ext]', 'extract-loader', 'html-loader'],
-    }
-```
+### Extract and separate HTML files
 
 ```diff
     {
-      test: /\.scss$/,
-      use: ['file-loader?name=[name].css', 'extract-loader', 'css-loader', 'postcss-loader', 'sass-loader'],
++     test: /\.html$/,
++     use: ['file-loader?name=[name].[ext]', 'extract-loader', 'html-loader']
+    }
+```
+
+### Extract and separate CSS files
+
+```diff
+    {
++     test: /\.scss$/,
++     use: ['file-loader?name=[name].css', 'extract-loader', 'css-loader', 'postcss-loader', 'sass-loader']
+    }
+```
+
+### Copy Image into output folder
+
+The file-loader make the file URL available for programmatic usage. So a use case is:
+
+```jsx
+    import url from './file.png'
+
+    function Component (props) {
+      return (
+        // dynamic
+        <img src={url}>
+      )
+    }
+```
+
+Some loaders may work in conjunction with the **file-loader**, e.g the **css-loader** transforms `url(./file.png)` into `require('./file.png')` internally, which requires the **file-loader** to handle the `require('./file.png')` module request.
+
+```diff
+    {
++     test: /\.(png|jpe?g|gif|svg)$/,
++     use: [
++       {
++         loader: 'file-loader',
++         options: {
++           name: '[name].[ext]'
++         }
++       }
++     ]
+    }
+```
+
+If you have a static image reference and just want to copy a file into the output folder, then simply use the **copy-webpack-plugin** plugin:
+
+```jsx
+    function Component (props) {
+      return (
+        // static (handcoded)
+        <img src="path/to/dist/image.png">
+      )
+    }
+```
+
+## Transform files into base64 URIs
+
+A typical use case is to have small images **base64 encoded** to avoid HTTP requests.
+
+Install **url-loader** with
+
+    npm i -D url-loader
+
+and define loader with a size limit for all image types:
+
+```diff
+    {
++     test: /\.(png|jpe?g|gif|svg)$/,
++     use: [
++       {
++         loader: 'url-loader',
++         options: {
++           limit: 5000
++         }
++       }
++     ]
+    }
+```
+
+If the file size exceeds the defined limit, then **url-loader** automatically falls back to the
+**file-loader**.
+
+If you want to define additional **file-loader** options or want to use an other fallback loader:
+
+```diff
+    {
+      test: /\.(png|jpe?g|gif|svg)$/,
+      use: [
+        {
+          loader: 'url-loader',
+          options: {
+            limit: 5000,
++           fallback: 'file-loader?name=[name].[ext]'
+          }
+        }
+      ]
     }
 ```
 
@@ -432,8 +542,6 @@ and define paths to be cleaned in `webpack.config.js`:
       ]
     }
 ```
-
-
 
 ## Hot Module Replacement
 
