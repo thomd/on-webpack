@@ -19,7 +19,7 @@ module.exports = {
       },
       {
         test: /\.scss$/,
-        use: ['file-loader?name=[name].css', 'extract-loader', 'css-loader', 'postcss-loader', 'sass-loader'],
+        use: [MiniCssExtractPlugin.loader, 'css-loader', 'postcss-loader', 'sass-loader'],
         exclude: /node_modules/
       }
     ]
@@ -27,6 +27,9 @@ module.exports = {
   plugins: [
     new HtmlWebpackPlugin({
       template: './src/index.html'
+    }),
+    new MiniCssExtractPlugin({
+      filename: '[name].css'
     })
   ]
 }
