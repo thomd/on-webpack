@@ -227,7 +227,7 @@ First add both loaders into Webpack configuration (loaders are evaluated from ri
     }
 ```
 
-Then import the CSS as a dependency in the entry file `./src/index.js` like being a module
+Then simply import the CSS in the entry file `./src/index.js` like being a module so Webpack know it's a dependency:
 
     import './main.css'
 
@@ -313,7 +313,7 @@ Using SASS allows to import selective Bootstrap components. If you for example o
 
 ## Export into separate files
 
-As an alternative to the **HTMLWebpackPlugin** or the **mini-css-extract-plugin** you can also use a combination of the **file-loader** and the **extract-loader**.
+As an lean alternative to the **HTMLWebpackPlugin**, the **extract-text-webpack-plugin** or the **mini-css-extract-plugin** you can also use a combination of the **file-loader** and the **extract-loader**.
 
 ```diff
     {
