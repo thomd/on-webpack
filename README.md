@@ -416,6 +416,25 @@ To fully manage styles outside of JavaScript, glob the CSS files through an entr
     }
 ```
 
+## Clean build folder before building
+
+Install the plugin
+
+    npm i -D clean-webpack-plugin
+
+and define paths to be cleaned in `webpack.config.js`:
+
+```diff
++   const CleanWebpackPlugin = require('clean-webpack-plugin')
+    module.exports = {
+      plugins: [
++       new CleanWebpackPlugin(['dist'])
+      ]
+    }
+```
+
+
+
 ## Hot Module Replacement
 
 Hot Module Replacement (HMR) allows modules to be updated at runtime without the need for a full refresh and without loosing current state.
