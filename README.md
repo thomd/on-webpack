@@ -1,4 +1,4 @@
-> Some personal notes on **Webpack 4**.
+# Notes on Webpack 4
 
 Webpack is a **module bundler**. In Webpack, everything is a **module**. Not only JavaScript but also everything else (style sheets, images, markup) can be a module.
 
@@ -9,8 +9,6 @@ With **loaders** you can intercept your dependencies and pre-process them before
 With **plugins** you can perform subsequent tasks like bundle optimizations (Webpack itself is considered a plugin with one behaviour by default: bundle assets).
 
 Hence, Webpack is basically about **entry**, **output**, **loaders** and **plugins**.
-
----
 
 <!-- START doctoc generated TOC please keep comment here to allow auto update -->
 <!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
@@ -29,17 +27,12 @@ Hence, Webpack is basically about **entry**, **output**, **loaders** and **plugi
   - [Import CSS](#import-css)
   - [Transpile CSS with SASS and PostCSS](#transpile-css-with-sass-and-postcss)
   - [Export into separate files](#export-into-separate-files)
-    - [Extract and separate HTML files](#extract-and-separate-html-files)
-    - [Extract and separate CSS files](#extract-and-separate-css-files)
-    - [Copy Image into output folder](#copy-image-into-output-folder)
   - [Transform files into base64 URIs](#transform-files-into-base64-uris)
 - [Webpack Plugins](#webpack-plugins)
   - [Create HTML index file for bundled modules](#create-html-index-file-for-bundled-modules)
   - [Extract CSS into separate files](#extract-css-into-separate-files)
   - [Clean build folder before building](#clean-build-folder-before-building)
   - [Hot Module Replacement](#hot-module-replacement)
-    - [Setup](#setup)
-    - [React Setup](#react-setup)
 - [Webpack Best Practices](#webpack-best-practices)
   - [Manage multiple configurations](#manage-multiple-configurations)
   - [Webpack Development Server](#webpack-development-server)
@@ -48,6 +41,8 @@ Hence, Webpack is basically about **entry**, **output**, **loaders** and **plugi
   - [inspectpack(1)](#inspectpack1)
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
+
+---
 
 # Entry & Output
 
