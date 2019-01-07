@@ -110,7 +110,7 @@ or you can use an entry object with multiple entry files and replace the output 
 -     entry: './src/index.js',
 +     entry: {
 +       main: ['./src/index.js', './src/analytics.js'],
-+       vendor: 'src/vendor.js'
++       vendor: './src/vendor.js'
 +     },
       output: {
         path: __dirname + '/dist',
@@ -118,6 +118,16 @@ or you can use an entry object with multiple entry files and replace the output 
 +       filename: '[name].js'
       }
     }
+```
+
+Use glob to append all files from a folder:
+
+```
+    entry: {
+      main: ['./src/index.js', './src/analytics.js'],
+      vendor: './src/vendor.js'
++     style: glob.sync('./src/**/!(_)*.scss')
+    },
 ```
 
 ## Webpack Options
@@ -550,14 +560,6 @@ If the CSS is not a JavaScript dependency, then add as an entry.
 
 In combination with the **HtmlWebpackPlugin**, a `<link rel="stylesheet" href="...">` tag is renderd in the extracted `ìndex.html`.
 
-To fully manage styles outside of JavaScript, glob the CSS files through an entry like this:
-
-```
-    entry: {
-      style: glob.sync("./src/**/*.css")
-    }
-```
-
 ## Clean build folder before building
 
 Install the plugin
@@ -764,6 +766,8 @@ Optionally add `args` or `env` like this:
 https://medium.com/@joeclever/three-simple-ways-to-inspect-a-webpack-bundle-7f6a8fe7195d
 
 https://levelup.gitconnected.com/lessons-learned-from-a-year-of-fighting-with-webpack-and-babel-ce3b4b634c46
+
+https://github.com/GoogleChromeLabs/webpack-libs-optimizations#styled-components
 
 ## inspectpack(1)
 
