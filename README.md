@@ -533,6 +533,33 @@ In case you need a specific HTML file, for example with a React application cont
     }
 ```
 
+You can also use the same plugin more than once, for example to generate multiple HTML pages:
+
+```
+    module.exports = {
+      entry: {
+        one: './src/one.js',
+        two: './src/two.js',
+      },
+      output: {
+        path: __dirname + '/dist',
+        filename: '[name].js'
+      },
+      plugins: [
+        new HtmlWebpackPlugin({
+          filename: 'one.html',
+          template: './src/one.html',
+          chunks: ['one']
+        }),
+        new HtmlWebpackPlugin({
+          filename: 'two.html',
+          template: './src/two.html',
+          chunks: ['two']
+        })
+      ]
+    }
+```
+
 ## Extract CSS into separate files
 
 The **mini-css-extract-plugin** extracts CSS into separate files. It creates a CSS file per JS file which contains CSS. It supports on-demand-loading of CSS and source-maps.
