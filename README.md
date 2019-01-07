@@ -19,6 +19,7 @@ Hence, Webpack is basically about **entry**, **output**, **loaders** and **plugi
   - [With configuration file](#with-configuration-file)
   - [Append multiple files](#append-multiple-files)
   - [Multiple bundles](#multiple-bundles)
+  - [Public Path](#public-path)
   - [Webpack Options](#webpack-options)
 - [Webpack Loaders](#webpack-loaders)
   - [Inline Loaders](#inline-loaders)
@@ -122,12 +123,26 @@ or you can use an entry object with multiple entry files and replace the output 
 
 Use glob to append all files from a folder:
 
-```
+```diff
     entry: {
       main: ['./src/index.js', './src/analytics.js'],
       vendor: './src/vendor.js'
 +     style: glob.sync('./src/**/!(_)*.scss')
     },
+```
+
+## Public Path
+
+The config key `output.publicPath` is used by some loaders & plugins (**url-loader**, **file-loader**, **HtmlWebpackPlugin**, etc.) to generate public URL paths for webpack output:
+
+```diff
+    module.exports = {
+      output: {
+        path: __dirname + '/dist',
++       publicPath: 'http://my.cdn.com',
+        filename: '[name].js'
+      }
+    }
 ```
 
 ## Webpack Options
