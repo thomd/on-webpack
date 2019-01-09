@@ -805,6 +805,30 @@ Optionally add `args` or `env` like this:
 
 ## Inspect Webpack bundle
 
+Use the **webpack-bundle-analyzer** plugin to generate a tree map chart of the modules within your bundle.
+
+Install with
+
+    npm i -D webpack-bundle-analyzer
+
+and configure in the production configuration `webpack.config.prod.js`:
+
+```diff
+    const merge = require('webpack-merge')
+    const base = require('./webpack.config')
++   const { BundleAnalyzerPlugin } = require('webpack-bundle-analyzer')
+
+    module.exports = merge(base, {
+      mode: 'production',
++     plugins: [
++       new BundleAnalyzerPlugin()
++     ]
+    })
+```
+
+This starts a local webserver. 
+
+
 https://medium.com/@joeclever/three-simple-ways-to-inspect-a-webpack-bundle-7f6a8fe7195d
 
 https://levelup.gitconnected.com/lessons-learned-from-a-year-of-fighting-with-webpack-and-babel-ce3b4b634c46
