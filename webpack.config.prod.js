@@ -9,6 +9,10 @@ module.exports = merge(base, {
       analyzerMode: 'static',
       openAnalyzer: false
     })
-  ]
+  ],
+  externals: {
+    'react': 'React',
+    'react-dom': 'ReactDOM'
+  }
 })
 

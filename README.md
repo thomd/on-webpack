@@ -37,6 +37,7 @@ Hence, Webpack is basically about **entry**, **output**, **loaders** and **plugi
 - [Webpack Best Practices](#webpack-best-practices)
   - [Manage multiple configurations](#manage-multiple-configurations)
   - [Webpack Development Server](#webpack-development-server)
+  - [Externalize Dependencies to be Loaded via CDN](#externalize-dependencies-to-be-loaded-via-cdn)
   - [Debugging Webpack](#debugging-webpack)
   - [Inspect Webpack bundles](#inspect-webpack-bundles)
   - [inspectpack(1)](#inspectpack1)
@@ -761,6 +762,40 @@ The dev server can be extended using the key `devServer` in the webpack configur
 ```
 
 Webpack-dev-server does **life-reloading**: the browser is refreshed immediately each time there is a code change. This is a different concept compared to HMR.
+
+## Externalize Dependencies to be Loaded via CDN
+
+To externalize dependencies from the bundle (e.g. to reduce size) and load them from a CDN, declare these
+dependencies and their variable-names in `webpack.config.prod.js` like this (as an example for externalizytion of React):
+
+```diff
+    module.exports = merge(base, {
+      mode: 'production',
+      plugins: [
+        new BundleAnalyzerPlugin({
+          analyzerMode: 'static',
+          openAnalyzer: false
+        })
+      ],
++     externals: {
++       'react': 'React',
++       'react-dom': 'ReactDOM'
++     }
+    })
+```
+
+Then add the dependencies into `./src/index.html` for production (the template syntax `<% ... %>` requires to
+use the **HTMLWebpackPlugin**):
+
+```diff
+    <body>
+      <div id="app"></div>
++     <% if (process.env.NODE_ENV === 'production') { %>
++       <script crossorigin src="https://unpkg.com/react@16/umd/react.production.min.js"></script>
++       <script crossorigin src="https://unpkg.com/react-dom@16/umd/react-dom.production.min.js"></script>
++     <% } %>
+    </body>
+```
 
 ## Debugging Webpack
 
