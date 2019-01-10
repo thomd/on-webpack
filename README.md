@@ -38,7 +38,7 @@ Hence, Webpack is basically about **entry**, **output**, **loaders** and **plugi
   - [Manage multiple configurations](#manage-multiple-configurations)
   - [Webpack Development Server](#webpack-development-server)
   - [Debugging Webpack](#debugging-webpack)
-  - [Inspect Webpack bundle](#inspect-webpack-bundle)
+  - [Inspect Webpack bundles](#inspect-webpack-bundles)
   - [inspectpack(1)](#inspectpack1)
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
@@ -803,7 +803,7 @@ Optionally add `args` or `env` like this:
 ```
 
 
-## Inspect Webpack bundle
+## Inspect Webpack bundles
 
 Use the **webpack-bundle-analyzer** plugin to generate a tree map chart of the modules within your bundle.
 
@@ -826,14 +826,29 @@ and configure in the production configuration `webpack.config.prod.js`:
     })
 ```
 
-This starts a local webserver. 
+This starts a local webserver and opens the page automatically.
 
+If you just like to generate a `./dits/report.html` file instead of a webserver, then change to plugin options to
 
-https://medium.com/@joeclever/three-simple-ways-to-inspect-a-webpack-bundle-7f6a8fe7195d
+```diff
+      plugins: [
+-       new BundleAnalyzerPlugin()
++       new BundleAnalyzerPlugin({
++         analyzerMode: 'static',
++         openAnalyzer: false
++       })
+      ]
+```
 
-https://levelup.gitconnected.com/lessons-learned-from-a-year-of-fighting-with-webpack-and-babel-ce3b4b634c46
+and open with
 
-https://github.com/GoogleChromeLabs/webpack-libs-optimizations#styled-components
+    open dist/report.html
+
+An Alternative which does not need to integrate a plugin, is to save the webpack output to JSON
+
+    npm run build -- --json > webpack-stats.json
+
+and drag-drop this file into the [webpack-visualizer](https://chrisbateman.github.io/webpack-visualizer/) site.
 
 ## inspectpack(1)
 
