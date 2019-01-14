@@ -279,7 +279,7 @@ and add into `.babelrc` as plugin:
 
 ## Use Babel Polyfill
 
-In order to target specific browsers, install **Babel Polyfill**
+In order to add a **standard library polyfill** for specific browsers, install **Babel Polyfill**
 
     npm i @babel/polyfill
 
@@ -308,7 +308,7 @@ Then import the polyfills in your application `./src/index.js` via
     ReactDOM.render(<App/>, document.getElementById('app'))
 ```
 
-which will append the **code-js** module (~200 KB) into your bundle. As not all features are needed by your target browsers, specify them in your browserslist in `package.json`:
+which will append the **code-js** module (**~70 KB**) into your bundle. As not all features are needed by your target browsers, specify them in your browserslist in `package.json`:
 
 ```diff
     {
@@ -320,7 +320,7 @@ which will append the **code-js** module (~200 KB) into your bundle. As not all 
     }
 ```
 
-You can print the browsers via
+You can print the so specified browsers via
 
     npm browserslist "last 2 versions, > 1%"
 
