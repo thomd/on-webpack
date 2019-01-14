@@ -34,6 +34,7 @@ Hence, Webpack is basically about **entry**, **output**, **loaders** and **plugi
   - [Create HTML index file for bundled modules](#create-html-index-file-for-bundled-modules)
   - [Extract CSS into separate files](#extract-css-into-separate-files)
   - [Clean build folder before building](#clean-build-folder-before-building)
+  - [Dynamic Imports - Asynchronously Load webpack Bundles](#dynamic-imports---asynchronously-load-webpack-bundles)
   - [Hot Module Replacement](#hot-module-replacement)
 - [Webpack Best Practices](#webpack-best-practices)
   - [Manage multiple configurations](#manage-multiple-configurations)
@@ -666,6 +667,59 @@ and define paths to be cleaned in `webpack.config.js`:
 +       new CleanWebpackPlugin(['dist'])
       ]
     }
+```
+
+## Dynamic Imports - Asynchronously Load webpack Bundles
+
+In order to improve the load performance of the application, we can asynchronously load bundles through Code-splitting.
+
+At the time of writing this, **dynamic imports** is a aproposal and will likely [change](https://github.com/tc39/proposal-dynamic-import) in the future.
+
+To use dynamic imports, install the babel plugin **plugin-syntax-dynamic-import**
+
+    npm i -D @babel/plugin-syntax-dynamic-import
+
+and register in `.bbelrc`
+
+```diff
+    {
+      plugins: [
+        '@babel/plugin-proposal-class-properties',
++       '@babel/plugin-syntax-dynamic-import'
+      ]
+    }
+```
+
+Then conditionally import modules like for example:
+
+```
+element.on('click', function () {
+  import('./src/modal').then(src => ...)
+})
+```
+
+### Dynamic Imports with React
+
+Dynamic imports in React are done by declaring a component as lazy via `React.lazy()` and loading it using the builtin `<React.Suspense>` component.
+
+As an example, add a new React Component `./src/Warning.js` and lazy load in your `./src/App.js`
+
+```diff
+    import React from 'react'
+
++   const Warning = React.lazy(() => import('./Warning'))
+
+    class App extends React.Component {
+      render() {
+        return (
++         <React.Suspense fallback={null}>
++           <Warning />
++         </React.Suspense> :
+        )
+      }
+    }
+
+    export default App
 ```
 
 ## Hot Module Replacement
