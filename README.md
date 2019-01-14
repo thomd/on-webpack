@@ -25,6 +25,7 @@ Hence, Webpack is basically about **entry**, **output**, **loaders** and **plugi
   - [Inline Loaders](#inline-loaders)
   - [Transpile JavaScript with Babel](#transpile-javascript-with-babel)
   - [Transpile React JSX with Babel](#transpile-react-jsx-with-babel)
+  - [Use Babel Polyfill](#use-babel-polyfill)
   - [Import CSS](#import-css)
   - [Transpile CSS with SASS and PostCSS](#transpile-css-with-sass-and-postcss)
   - [Export into separate files](#export-into-separate-files)
@@ -275,6 +276,53 @@ and add into `.babelrc` as plugin:
 +     plugins: ["@babel/plugin-proposal-class-properties"]
     }
 ```
+
+## Use Babel Polyfill
+
+In order to target specific browsers, install **Babel Polyfill**
+
+    npm i @babel/polyfill
+
+and instruct Babel to include these built ins in `.babelrc`:
+
+```diff
+    {
+      presets: [
+-       '@babel/preset-env',
++       ['@babel/preset-env', {
++         useBuiltIns: 'entry'
++       }],
+        '@babel/preset-react'
+      ]
+    }
+```
+
+Then import the polyfills in your application `./src/index.js` via
+
+```diff
+    import React from 'react'
+    import ReactDOM from 'react-dom'
++   import '@babel/polyfill'
+    import App from './App'
+
+    ReactDOM.render(<App/>, document.getElementById('app'))
+```
+
+which will append the **code-js** module (~200 KB) into your bundle. As not all features are needed by your target browsers, specify them in your browserslist in `package.json`:
+
+```diff
+    {
+      ...
+      "browserslist": [
+        "last 2 versions",
+        "> 1%"
+      ]
+    }
+```
+
+You can print the browsers via
+
+    npm browserslist "last 2 versions, > 1%"
 
 ## Import CSS
 
