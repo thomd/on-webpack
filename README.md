@@ -34,8 +34,10 @@ Hence, Webpack is basically about **entry**, **output**, **loaders** and **plugi
   - [Create HTML index file for bundled modules](#create-html-index-file-for-bundled-modules)
   - [Extract CSS into separate files](#extract-css-into-separate-files)
   - [Clean build folder before building](#clean-build-folder-before-building)
-  - [Dynamic Imports - Asynchronously Load webpack Bundles](#dynamic-imports---asynchronously-load-webpack-bundles)
   - [Hot Module Replacement](#hot-module-replacement)
+- [Code Splitting](#code-splitting)
+  - [Entry Points](#entry-points)
+  - [Dynamic Imports](#dynamic-imports)
 - [Webpack Best Practices](#webpack-best-practices)
   - [Manage multiple configurations](#manage-multiple-configurations)
   - [Webpack Development Server](#webpack-development-server)
@@ -186,7 +188,7 @@ Use `module.rules` whenever possible, as this will reduce boilerplate in your so
 
 ## Transpile JavaScript with Babel
 
-First install [Babel](https://babeljs.io/) dependencies
+First install **Babel** dependencies
 
     npm i -D @babel/core @babel/cli @babel/preset-env
 
@@ -669,59 +671,6 @@ and define paths to be cleaned in `webpack.config.js`:
     }
 ```
 
-## Dynamic Imports - Asynchronously Load webpack Bundles
-
-In order to improve the load performance of the application, we can asynchronously load bundles through Code-splitting.
-
-At the time of writing this, **dynamic imports** is a aproposal and will likely [change](https://github.com/tc39/proposal-dynamic-import) in the future.
-
-To use dynamic imports, install the babel plugin **plugin-syntax-dynamic-import**
-
-    npm i -D @babel/plugin-syntax-dynamic-import
-
-and register in `.bbelrc`
-
-```diff
-    {
-      plugins: [
-        '@babel/plugin-proposal-class-properties',
-+       '@babel/plugin-syntax-dynamic-import'
-      ]
-    }
-```
-
-Then conditionally import modules like for example:
-
-```
-element.on('click', function () {
-  import('./src/modal').then(src => ...)
-})
-```
-
-### Dynamic Imports with React
-
-Dynamic imports in React are done by declaring a component as lazy via `React.lazy()` and loading it using the builtin `<React.Suspense>` component.
-
-As an example, add a new React Component `./src/Warning.js` and lazy load in your `./src/App.js`
-
-```diff
-    import React from 'react'
-
-+   const Warning = React.lazy(() => import('./Warning'))
-
-    class App extends React.Component {
-      render() {
-        return (
-+         <React.Suspense fallback={null}>
-+           <Warning />
-+         </React.Suspense> :
-        )
-      }
-    }
-
-    export default App
-```
-
 ## Hot Module Replacement
 
 Hot Module Replacement (HMR) allows modules to be updated at runtime without the need for a full refresh and without loosing current state.
@@ -786,6 +735,88 @@ Then mark your root component `./src/App.js` as hot-exported:
 
 -   export default App
 +   export default hot(App)
+```
+
+# Code Splitting
+
+There are three approaches to code splitting available:
+
+1. **Entry Points**: Manually split code using entry configuration.
+
+2. **Prevent Duplication**: Use the **SplitChunksPlugin** to dedupe and split chunks.
+
+3. **Dynamic Imports**: Split code via inline function calls within modules.
+
+## Entry Points
+
+The easiest way to split code is to define code chunks in a `webpack.config.js` entry object:
+
+```
+    module.exports = {
+      entry: {
+        'main': './src/index.js',
+        'page': './src/page.js',
+      }
+    }
+```
+
+The downside of this approach is
+
+* If there are any duplicated modules between entry chunks they will be included in both bundles.
+
+* It isn't as flexible and can't be used to dynamically split code with the core application logic.
+
+## Dynamic Imports
+
+In order to improve the load performance of the application, we can asynchronously load bundles through Code-splitting.
+
+At the time of writing this, **dynamic imports** is a aproposal and will likely [change](https://github.com/tc39/proposal-dynamic-import) in the future.
+
+To use dynamic imports, install the babel plugin **plugin-syntax-dynamic-import**
+
+    npm i -D @babel/plugin-syntax-dynamic-import
+
+and register in `.babelrc`
+
+```diff
+    {
+      plugins: [
+        '@babel/plugin-proposal-class-properties',
++       '@babel/plugin-syntax-dynamic-import'
+      ]
+    }
+```
+
+Then conditionally import modules like for example:
+
+```
+element.on('click', function () {
+  import('./src/modal').then(src => ...)
+})
+```
+
+### Dynamic Imports with React
+
+Dynamic imports in React are done by declaring a component as lazy via `React.lazy()` and loading it using the builtin `<React.Suspense>` component.
+
+As an example, add a new React Component `./src/Warning.js` and lazy load in your `./src/App.js`
+
+```diff
+    import React from 'react'
+
++   const Warning = React.lazy(() => import('./Warning'))
+
+    class App extends React.Component {
+      render() {
+        return (
++         <React.Suspense fallback={null}>
++           <Warning />
++         </React.Suspense> :
+        )
+      }
+    }
+
+    export default App
 ```
 
 # Webpack Best Practices

@@ -38,7 +38,12 @@ module.exports = {
     ]
   },
   plugins: [
-    new CleanWebpackPlugin(['dist']),
+    new CleanWebpackPlugin(['dist', 'report']),
+    new HtmlWebpackPlugin({
+      filename: 'index.html',
+      template: './src/index.html',
+      chunks: ['main']
+    }),
     new HtmlWebpackPlugin({
       template: './src/index.html'
     }),
