@@ -37,8 +37,10 @@ Hence, Webpack is basically about **entry**, **output**, **loaders** and **plugi
   - [Hot Module Replacement](#hot-module-replacement)
 - [Code Splitting](#code-splitting)
   - [Entry Points](#entry-points)
+  - [Prevent Duplication](#prevent-duplication)
   - [Dynamic Imports](#dynamic-imports)
 - [Webpack Best Practices](#webpack-best-practices)
+  - [Source Maps](#source-maps)
   - [Manage multiple configurations](#manage-multiple-configurations)
   - [Webpack Development Server](#webpack-development-server)
   - [Externalize Dependencies to be Loaded via CDN](#externalize-dependencies-to-be-loaded-via-cdn)
@@ -766,6 +768,16 @@ The downside of this approach is
 
 * It isn't as flexible and can't be used to dynamically split code with the core application logic.
 
+## Prevent Duplication
+
+Prevent Duplication with the **SplitChunksPlugin**
+
+Webpack uses this plugin internally and we can enable/configure it inside `optimization` block of `webpack.config.js`.
+
+
+
+TODO
+
 ## Dynamic Imports
 
 In order to improve the load performance of the application, we can asynchronously load bundles through Code-splitting.
@@ -795,6 +807,30 @@ element.on('click', function () {
 })
 ```
 
+Syntactically, dynamic imports are done using `import()` as a function instead of a statement:
+
+```javascript
+    import('lodash')          // dynamic import
+    import 'lodash'
+```
+
+### Magic Comments for Dynamic Imports
+
+You can add metadata for dynamic imports like this:
+
+```diff
+-   import('./src/module.js')
++   import(/* magic comment */'./src/module.js')
+```
+
+Set the **loading strategy** (lazy, lazy-once, eager, weak) via
+
+    import(/* webpackMode: "eager" */'./src//module.js')
+
+Set the chunk name with
+
+    import(/* webpackChunkName: "my-chunk" */'./src/module.js')
+
 ### Dynamic Imports with React
 
 Dynamic imports in React are done by declaring a component as lazy via `React.lazy()` and loading it using the builtin `<React.Suspense>` component.
@@ -820,6 +856,34 @@ As an example, add a new React Component `./src/Warning.js` and lazy load in you
 ```
 
 # Webpack Best Practices
+
+## Source Maps
+
+Generate **separate sourcemaps** (preferred for **production**) with
+
+```diff
+    module.exports = {
+      entry: './src/index.js',
+      output: {
+        path: __dirname + '/dist',
+        filename: 'main.js'
+      },
++     devtool: 'source-map'
+    }
+```
+
+and **inline sourcemaps** (ideal for **development** due to their speed) with
+
+```diff
+    module.exports = {
+      entry: './src/index.js',
+      output: {
+        path: __dirname + '/dist',
+        filename: 'main.js'
+      },
++     devtool: 'cheap-module-eval-source-map'
+    }
+```
 
 ## Manage multiple configurations
 
