@@ -282,6 +282,21 @@ and add into `.babelrc` as plugin:
     }
 ```
 
+If you want to import a React Components without a `.jsx` extension like this
+
+```diff
+-   import App as './App.jsx'
++   import App as './App'
+```
+
+you might need to tell webpack to resolve this extions in `webpack.config.js`:
+
+```diff
++   resolve: {
++     extensions: ['.js', '.jsx'],
++   },
+```
+
 ## Use Babel Polyfill
 
 In order to add a **standard library polyfill** for specific browsers, install **Babel Polyfill**
@@ -741,7 +756,17 @@ Then mark your root component `./src/App.js` as hot-exported:
 
 # Code Splitting
 
-There are three approaches to code splitting available:
+There are different types of chunks:
+
+* **sync chunks** loaded synchronously with `main.js` and you would see `<script src="chunk.js"></script>` in source code.
+
+* **async chunks** are loaded on demand (lazy loaded).
+
+* **vendor chunks** contain 3rd party code.
+
+* **common chunks** contain code which is shared between different chunks.
+
+There are three approaches to split code into **chunks**:
 
 1. **Entry Points**: Manually split code using entry configuration.
 
@@ -810,7 +835,7 @@ element.on('click', function () {
 Syntactically, dynamic imports are done using `import()` as a function instead of a statement:
 
 ```javascript
-    import('lodash')          // dynamic import
+    import('lodash')          // dynamic import returning a Promise
     import 'lodash'
 ```
 
