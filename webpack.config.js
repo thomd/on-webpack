@@ -5,11 +5,17 @@ const CleanWebpackPlugin = require('clean-webpack-plugin')
 module.exports = {
   entry: {
     'main': ['./src/index.js', './src/analytics.js'],
+    'page': './src/page.js',
     'style': './src/main.scss'
   },
   output: {
     path: __dirname + '/dist',
     filename: '[name].js'
+  },
+  optimization: {
+    splitChunks: {
+      chunks: 'all'
+    }
   },
   module: {
     rules: [
@@ -45,7 +51,9 @@ module.exports = {
       chunks: ['main']
     }),
     new HtmlWebpackPlugin({
-      template: './src/index.html'
+      filename: 'page.html',
+      template: './src/page.html',
+      chunks: ['page']
     }),
     new MiniCssExtractPlugin({
       filename: '[name].css'

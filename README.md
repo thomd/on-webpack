@@ -20,7 +20,6 @@ Hence, Webpack is basically about **entry**, **output**, **loaders** and **plugi
   - [Append multiple files](#append-multiple-files)
   - [Multiple bundles](#multiple-bundles)
   - [Public Path](#public-path)
-  - [Webpack Options](#webpack-options)
 - [Webpack Loaders](#webpack-loaders)
   - [Inline Loaders](#inline-loaders)
   - [Transpile JavaScript with Babel](#transpile-javascript-with-babel)
@@ -40,6 +39,7 @@ Hence, Webpack is basically about **entry**, **output**, **loaders** and **plugi
   - [Prevent Duplication](#prevent-duplication)
   - [Dynamic Imports](#dynamic-imports)
 - [Webpack Best Practices](#webpack-best-practices)
+  - [Webpack CLI Options](#webpack-cli-options)
   - [Source Maps](#source-maps)
   - [Manage multiple configurations](#manage-multiple-configurations)
   - [Webpack Development Server](#webpack-development-server)
@@ -151,16 +151,6 @@ The config key `output.publicPath` is used by some loaders & plugins (**url-load
       }
     }
 ```
-
-## Webpack Options
-
-Run Webpack in **watch mode** with
-
-    npx webpack --watch
-
-Print also hidden modules with
-
-    npx webpack --display-modules
 
 # Webpack Loaders
 
@@ -760,7 +750,8 @@ There are different types of chunks:
 
 * **sync chunks** loaded synchronously with `main.js` and you would see `<script src="chunk.js"></script>` in source code.
 
-* **async chunks** are loaded on demand (lazy loaded).
+* **async chunks** are loaded on demand (lazy loaded). Async chunks are created using dynamic imports Async
+  chunks are created using dynamic imports
 
 * **vendor chunks** contain 3rd party code.
 
@@ -797,15 +788,62 @@ The downside of this approach is
 
 Prevent Duplication with the **SplitChunksPlugin**
 
-Webpack uses this plugin internally and we can enable/configure it inside `optimization` block of `webpack.config.js`.
+Webpack uses this plugin internally and we can enable/configure it inside `optimization.splitChunks` block of `webpack.config.js`.
 
+To create a **vendor chunk** file from all those import statements of files coming from `node_modules`, add into `webpack.config.js`:
 
+```diff
+    module.exports = {
+      entry: './src/index.js',
+      output: {
+        path: __dirname + '/dist',
+        filename: 'main.js',
++       chunkFilename: '[name].js'
+      },
+      ...
+      optimization: {
++       splitChunks: {
++         cacheGroups: {
++           default: false,
++           vendors: false,
++           vendor: {
++             chunks: 'all',
++             test: /node_modules/,
++             name: 'vendor'
++           }
++         }
++       }
+      }
+      ...
+    }
+```
 
-TODO
+Here `chunks` value tells **SplitChunksPlugin** the nature of chunks to consider for evaluation. 
+It’s value can be **initial** (only add files to the chunk if they are imported inside sync chunks), **async** (only add files to the chunk if they are imported inside async chunks) or **all**.
+
+Supposed we have chunked async modules which have a common dependency, then this dependency will be inside all chunks redundantly. To avoid this, we create a **common chunk** which shares a dependency between different chunks:
+
+```diff
+      optimization: {
+        splitChunks: {
+          cacheGroups: {
+            default: false,
+            vendors: false,
++           common: {
++             name: 'common',
++             minChunks: 2,
++             chunks: 'async',
++             reuseExistingChunk: true,
++             enforce: true
++           }
+          }
+        }
+      }
+```
 
 ## Dynamic Imports
 
-In order to improve the load performance of the application, we can asynchronously load bundles through Code-splitting.
+In order to improve the load performance of the application, we can asynchronously load bundles through code-splitting.
 
 At the time of writing this, **dynamic imports** is a aproposal and will likely [change](https://github.com/tc39/proposal-dynamic-import) in the future.
 
@@ -881,6 +919,20 @@ As an example, add a new React Component `./src/Warning.js` and lazy load in you
 ```
 
 # Webpack Best Practices
+
+## Webpack CLI Options
+
+Run Webpack in **watch mode** with
+
+    npx webpack --watch
+
+Print also hidden modules with
+
+    npx webpack --display-modules
+
+Do not print modules with
+
+    npx webpack --display-max-modules=0
 
 ## Source Maps
 
