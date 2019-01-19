@@ -1103,10 +1103,17 @@ and open with
 
 An Alternative which does not need to integrate a plugin, is to save the webpack output to JSON
 
-    npm run build -- --json > webpack-stats.json
+    npm run -s build -- --json > stats.json
 
 and drag-drop this file into the [webpack-visualizer](https://chrisbateman.github.io/webpack-visualizer/) site.
 
 ## inspectpack(1)
 
-https://github.com/FormidableLabs/inspectpack
+`inspectpack` is an inspection tool to detect **version skews**, **duplicate files** and opportunities to **reduce file sizes**.
+
+    npm run -s build -- --json > stats.json
+    npx inspectpack -s stats.json -a versions
+    npx inspectpack -s stats.json -a duplicates
+    npx inspectpack -s stats.json -a sizes
+
+
