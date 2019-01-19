@@ -26,7 +26,7 @@ Hence, Webpack is basically about **entry**, **output**, **loaders** and **plugi
   - [Transpile React JSX with Babel](#transpile-react-jsx-with-babel)
   - [Use Babel Polyfill](#use-babel-polyfill)
   - [Import CSS](#import-css)
-  - [Transpile CSS with SASS and PostCSS](#transpile-css-with-sass-and-postcss)
+  - [Transpile SASS and PostCSS](#transpile-sass-and-postcss)
   - [Export into separate files](#export-into-separate-files)
   - [Transform files into base64 URIs](#transform-files-into-base64-uris)
 - [Webpack Plugins](#webpack-plugins)
@@ -376,7 +376,7 @@ and import subsequent CSS dependencies in `main.css` like so
 
 Injecting CSS as `<style>` tag by JavaScript is performance wise not the best idea - you should load CSS as soon as possible to avoid FOUC and leverage caching. Use the MiniCssExtractPlugin plugin (see below) to extract CSS as a separate file.
 
-## Transpile CSS with SASS and PostCSS
+## Transpile SASS and PostCSS
 
 Install loaders, SASS and Autoprefixer with
 
