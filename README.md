@@ -46,7 +46,6 @@ Hence, Webpack is basically about **entry**, **output**, **loaders** and **plugi
   - [Externalize Dependencies to be Loaded via CDN](#externalize-dependencies-to-be-loaded-via-cdn)
   - [Debugging Webpack](#debugging-webpack)
   - [Inspect Webpack bundles](#inspect-webpack-bundles)
-  - [inspectpack(1)](#inspectpack1)
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
 
@@ -279,7 +278,7 @@ If you want to import a React Components without a `.jsx` extension like this
 +   import App as './App'
 ```
 
-you might need to tell webpack to resolve this extions in `webpack.config.js`:
+you might need to tell webpack to resolve this extensions in `webpack.config.js`:
 
 ```diff
 +   resolve: {
@@ -374,16 +373,16 @@ and import subsequent CSS dependencies in `main.css` like so
 +   @import './app.css';
 ```
 
-Injecting CSS as `<style>` tag by JavaScript is performance wise not the best idea - you should load CSS as soon as possible to avoid FOUC and leverage caching. Use the MiniCssExtractPlugin plugin (see below) to extract CSS as a separate file.
+Injecting CSS as `<style>` tag by JavaScript is performance wise not the best idea - you should load CSS as soon as possible to avoid FOUC and leverage caching. Use the **MiniCssExtractPlugin** plugin to extract CSS as a separate file.
 
 ## Transpile SASS and PostCSS
 
-Install loaders, SASS and Autoprefixer with
+Install loaders, **SASS** and **Autoprefixer** with
 
     npm i -D node-sass autoprefixer
     npm i -D postcss-loader sass-loader
 
-and add a PostCSS configuration `postcss.config.js`
+and add a **PostCSS** configuration `postcss.config.js`
 
 ```diff
 +   module.exports = {
@@ -561,7 +560,7 @@ If you want to define additional **file-loader** options or want to use an other
 
 The **HtmlWebpackPlugin** creates a new `index.html` file and add script tags for each resulting bundle. It also supports templating syntax and is highly configurable.
 
-If you have any CSS assets (for example, CSS extracted with the MiniCssExtractPlugin) then these will be included with `<link>` tags in the HTML head.
+If you have any CSS assets (for example, CSS extracted with the **MiniCssExtractPlugin**) then these will be included with `<link>` tags in the HTML head.
 
 Install plugin with
 
@@ -659,7 +658,7 @@ If the CSS is not a JavaScript dependency, then add as an entry.
     }
 ```
 
-In combination with the **HtmlWebpackPlugin**, a `<link rel="stylesheet" href="...">` tag is renderd in the extracted `ìndex.html`.
+In combination with the **HtmlWebpackPlugin**, a `<link rel="stylesheet" href="...">` tag is rendered in the extracted `ìndex.html`.
 
 ## Clean build folder before building
 
@@ -684,7 +683,7 @@ Hot Module Replacement (HMR) allows modules to be updated at runtime without the
 
 HMR can only work with loaders that implement and understand HMR API, for example **style-loader**, **react-hot-loader**, etc. HMR is not supported by **MiniCssExtractPlugin.loader**.
 
-You need to use Webpack via webpack-dev-server and it should oly be used for development.
+You need to use Webpack via webpack-dev-server and it should only be used for development.
 
 ### Setup
 
@@ -750,8 +749,7 @@ There are different types of chunks:
 
 * **sync chunks** loaded synchronously with `main.js` and you would see `<script src="chunk.js"></script>` in source code.
 
-* **async chunks** are loaded on demand (lazy loaded). Async chunks are created using dynamic imports Async
-  chunks are created using dynamic imports
+* **async chunks** are loaded on demand (lazy loaded). Async chunks are created using dynamic imports.
 
 * **vendor chunks** contain 3rd party code.
 
@@ -761,7 +759,7 @@ There are three approaches to split code into **chunks**:
 
 1. **Entry Points**: Manually split code using entry configuration.
 
-2. **Prevent Duplication**: Use the **SplitChunksPlugin** to dedupe and split chunks.
+2. **Prevent Duplication**: Use the **SplitChunksPlugin** to de-duplicate and split chunks.
 
 3. **Dynamic Imports**: Split code via inline function calls within modules.
 
@@ -845,7 +843,7 @@ Supposed we have chunked async modules which have a common dependency, then this
 
 In order to improve the load performance of the application, we can asynchronously load bundles through code-splitting.
 
-At the time of writing this, **dynamic imports** is a aproposal and will likely [change](https://github.com/tc39/proposal-dynamic-import) in the future.
+At the time of writing this, **dynamic imports** is a proposal and will likely [change](https://github.com/tc39/proposal-dynamic-import) in the future.
 
 To use dynamic imports, install the babel plugin **plugin-syntax-dynamic-import**
 
@@ -896,7 +894,7 @@ Set the chunk name with
 
 ### Dynamic Imports with React
 
-Dynamic imports in React are done by declaring a component as lazy via `React.lazy()` and loading it using the builtin `<React.Suspense>` component.
+Dynamic imports in React are done by declaring a component as lazy via `React.lazy()` and loading it using the built-in `<React.Suspense>` component.
 
 As an example, add a new React Component `./src/Warning.js` and lazy load in your `./src/App.js`
 
@@ -936,7 +934,7 @@ Do not print modules with
 
 ## Source Maps
 
-Generate **separate sourcemaps** (preferred for **production**) with
+Generate **separate source maps** (preferred for **production**) with
 
 ```diff
     module.exports = {
@@ -949,7 +947,7 @@ Generate **separate sourcemaps** (preferred for **production**) with
     }
 ```
 
-and **inline sourcemaps** (ideal for **development** due to their speed) with
+and **inline source maps** (ideal for **development** due to their speed) with
 
 ```diff
     module.exports = {
@@ -1040,7 +1038,7 @@ Webpack-dev-server does **life-reloading**: the browser is refreshed immediately
 ## Externalize Dependencies to be Loaded via CDN
 
 To externalize dependencies from the bundle (e.g. to reduce size) and load them from a CDN, declare these
-dependencies and their variable-names in `webpack.config.prod.js` like this (as an example for externalizytion of React):
+dependencies and their variable-names in `webpack.config.prod.js` like this (as an example for externalization of React):
 
 ```diff
     module.exports = merge(base, {
@@ -1159,7 +1157,7 @@ An Alternative which does not need to integrate a plugin, is to save the webpack
 
 and drag-drop this file into the [webpack-visualizer](https://chrisbateman.github.io/webpack-visualizer/) site.
 
-## inspectpack(1)
+### inspectpack(1)
 
 `inspectpack` is an inspection tool to detect **version skews**, **duplicate files** and opportunities to **reduce file sizes**.
 
