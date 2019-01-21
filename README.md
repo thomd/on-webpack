@@ -1022,7 +1022,6 @@ The dev server can be extended using the key `devServer` in the webpack configur
 
 ```diff
     module.exports = {
-      mode: 'development',
 +     devServer: {
 +       port: 9000,
 +       disableHostCheck: true,
@@ -1030,6 +1029,16 @@ The dev server can be extended using the key `devServer` in the webpack configur
 +         "Access-Control-Allow-Origin": "*"
 +       }
 +     }
+    }
+```
+
+If the page content, e.g. `index.html` is outside the `dist` folder, the set the content base as:
+
+```diff
+    module.exports = {
+      devServer: {
++       contentBase: '.'
+      }
     }
 ```
 
